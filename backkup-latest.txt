@@ -8,7 +8,7 @@ class Semester {
     struct Calculate {
         int size;
         string id, name;
-        double red,avgi;
+        double red;
         Calculate* next;
     };
 public:
@@ -17,27 +17,23 @@ public:
     }
     bool menu(int x) {
         if (head == NULL)
-            return false;
+          return false;
 
         Calculate* t = new Calculate;
         t = head;
-
         while (t != NULL) {
-            if (t->size == x)
-                return true;
-            t = t->next;
+          if (t->size == x)
+            return true;
+          t = t->next;
         }
-
         return false;
     }
 
     void calCgpa() {
-        string id;
-        string name;
+        string id,name;
         double red;
 
         cout << "\n-------------- New Student -----------------" << endl;
-
         cout << endl;
         cout << "Enter ID Student : ";
         cin >> id;
@@ -46,20 +42,20 @@ public:
         cout << "Enter Student CGPA : ";
         cin >> red;
         cout << "-----------------------------------\n\n" << endl;
-
-
-        insertGPA(&id, &name, &red);
-      return ;
-
+        if(red <= 4.00 && red >= 0){
+          insertGPA(&id, &name, &red);
+           return ;
+        }else{
+          cout<<"Your cgpa pointer must below than [4.00]";
+        }
     }
+
     int roll = 1;
 
     void insertGPA(string* id, string* name, double* red) {
         //add new Calculate to linked list
         // Create new Calculate to Insert Record
-
         Calculate* t = new Calculate();
-
         t->size = roll;
         t->id = *id;
         t->name = *name;
@@ -81,8 +77,6 @@ public:
             t->next = c->next;
             c->next = t;
         }
-
-        
         cout << "Student [" << t->size << "] : " << t->id << "\t\t" << t->name << "\t\t" << t->red << fixed << setprecision(2) << "\t\t";
         cout << "\n[Record] Inserted "
             << "Successfully.\n";
@@ -92,13 +86,11 @@ public:
     void deleteAll() {
         cout << "\n[Record] Deleting Process..\n";
         Calculate* find = NULL;
-        while (head != NULL )
-        {
+        while (head != NULL ){
             //find = head->next;
             free(head);
             head = head->next;
         }
-
     }
 
     void deleteSel( string id) {
@@ -127,21 +119,18 @@ public:
         }
     }
 
-    double avg(Calculate* current) {
-        int count = 0; // Initialize count
+    double avg(Calculate* cur) {
+        int count = 0; 
         double sum = 0.0;
         double avgi = 0.0;
-
-        current = head; // Initialize current
-        while (current != NULL) {
+        cur = head; 
+        while (cur != NULL) {
             count++;
-            sum = sum + current->red;
-            current = current->next;
+            sum = sum + cur->red;
+            cur = cur->next;
         }
-
         // calculate average
         avgi = sum / count;
-
         return avgi;
     }
 
@@ -152,7 +141,7 @@ public:
         cout << "\nLowest student Record : \nID\t\tNAME\t\tCGPA\n";
         while (p != NULL)
         {
-            if ( min > p->red ) { // done sttled error
+            if ( min > p->red ) {
                 id = p->id;
                 name = p->name;
                 min = p->red;        
@@ -188,7 +177,7 @@ public:
         cout << "\n\nProbation student Record : \nROLL\t\tID\t\tNAME\t\tCGPA\n";
         while (p != NULL )
         {
-          if(prob > p->red || p->red <= 2.00){
+          if(p->red <= 2.00){
             id = p->id;
             name = p->name;
             prob = p->red;
@@ -206,7 +195,7 @@ public:
         cout << "\n\nDean-List student Record : \nROLL\t\tID\t\tNAME\t\tCGPA\n";
         while (z != NULL )
         {
-          if(dean <= z->red ||  z->red >= 3.50){
+          if(z->red >= 3.50){
             id = z->id;
             name = z->name;
             dean = z->red;
@@ -218,23 +207,17 @@ public:
 
     void display(){
       Calculate *p=head;
-      if (p == NULL) {
-          cout << "[Record] No"
-              << "Available\n";
-      }
-      else {
-          cout << "\nROLL\t|\t ID \t|\t NAME \t|\t CGPA\n";
-                // Until p is not NULL
-                
-                while (p != NULL) {
-                    cout << endl
-                        << p->size << "\t\t|\t"
-                        << p->id << "\t|\t"
-                        << p->name << "\t\t|\t"
-                        << p->red << "\t\t";
-                    p = p->next;
-                }
-          cout<<endl<<"Total Average : "<<avg(p);
+      cout<<"\n ------------List All Student-----------"<<endl<<"Total Average : "<<avg(p);
+      cout << "\nROLL\t|\t ID \t|\t NAME \t|\t CGPA\n";
+      // Until p is not NULL
+      
+      while (p != NULL) {
+          cout << endl
+              << p->size << "\t\t|\t"
+              << p->id << "\t\t|\t"
+              << p->name << "\t\t|\t"
+              << p->red << "\t\t";
+          p = p->next;
       }
     }
 
@@ -250,56 +233,51 @@ public:
         cout << "[7] All student with CGPA >= 3.50 (dean list)\n";
         cout << "Your Selection : ";
         cin >> x;
-        if (x == 2) {
-            if (p == NULL) {
-                cout << "No Record "
-                    << "Available\n";
-            }
-            else {
-                cout<<endl<<"Total Average : "<<avg(p);
-                cout << "\nROLL\t|\t ID \t|\t NAME \t|\t CGPA\n";
-                // Until p is not NULL
+        if(p==NULL) {
+          display();
+          cout << "No Record Available\n\n";
+          return;
+        }
+        else{
+          if( x == 1) {
+            string temp;
+            cout << "Enter Student ID: "; cin >> temp;
+            while(p!=NULL)
+            {
+              if(p->id == temp)
+              {
                 
-                while (p != NULL) {
-                    cout << endl
-                        << p->size << "\t\t|\t"
-                        << p->id << "\t\t|\t"
-                        << p->name << "\t\t|\t"
-                        << p->red << "\t\t";
-                    p = p->next;
-                }
+                cout <<"\n\nRecord Student :"
+                     << "\nName     : " << p->name << endl;
+                cout << "Student ID : " << p->id << endl;
+                cout << "CGPA       : " << p->red << endl << endl;
+              }
+              p = p->next;
             }
-        }
-        else if (x == 3) {
+          }
+          else if (x == 2) 
+            display();
+          else if (x == 3) 
             cout << endl << "Average Student CGPA : "<<avg(p);
-            
-        }
-        else if (x == 4) {
+          else if (x == 4)
             max(p);
-        }
-        else if (x == 5) {
+          else if (x == 5) 
             min(p);
-        }
-        else if (x == 6) {
+          else if (x == 6) 
             probation(p);
-        }
-        else if (x == 7) {
+          else if (x == 7) 
             deanList(p);
-        }
+      }
     }
 private:
     Calculate* head;
 };
-
-
 
 int main() {
     //create class object and variables
     Semester list;
     int x = 0, choice;
     string reason;
-
-
     do {
         cout << "\n\n\t\tWelcome to Student Record "
             "\n\n\tPress\n\t1 to "
@@ -321,7 +299,7 @@ int main() {
         }
     } while (choice != 5);
     list.deleteAll();
-    cout<<"\n[Record] All deleted\n"<<"List student : \n";
+    cout<<"\n[Record] All deleted\n";
     list.display();
     cout<<endl;
 }
